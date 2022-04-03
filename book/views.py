@@ -153,11 +153,13 @@ book = BookInfo.objects.get(id=1)
 
 # 2.实例化序列化器,将对象数据传递给序列化器
 # BookInfoSerializer(instance=对象, data=字典)
+# instance 对象转字典  data 字典转对象
+# 当两个数据都传入的情况下，系统会认为更新数据 调用updata方法
 # 默认情况下不能传递查询结果集，如果需要的话加many=True
 serializer = BookInfoSerializer(instance=book)
 
 # 3.获取序列化器将对象转化为字典的数据
-serializer.data
+
 
 """
 反序列化的使用

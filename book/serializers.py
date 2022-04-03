@@ -14,6 +14,7 @@ class 序列化器名字(serializers.Serializer)
     字段的类型和模型的类型一致
 """
 from rest_framework import serializers
+from book.models import *
 
 
 # 关系型数据库外键查询
@@ -48,6 +49,22 @@ class BookInfoSerializer(serializers.Serializer):
         if readcount <= commentcount:
             raise serializers.ValidationError('评论量大于阅读量')
         return attrs
+
+    # 序列化数据的保存
+    # 保存数据之前要先验证数据 .is_valid  这样会调用create方法
+
+    def create(self, validated_data):
+        return BookInfo.objects.create(**validated_data)
+
+    # instance和data都传入会进行更新操作
+    def update(self, instance, validated_data):
+        # instance 序列化器创建时 传递的对象
+        # validated_data 序列化器创建时 验证没有问题的数据
+        # get(key, default_value)
+        # get的key是None，使用默认值
+        instance.name = validated_data.get('name', instance.name)
+        instance.save()     # 调用save 数据入库
+        return instance
 
 
 class PeopleInfoSerializer(serializers.Serializer):
